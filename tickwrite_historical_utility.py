@@ -1,4 +1,4 @@
-from Tickwrite_Utility import *
+import tickwrite_tility 
 import sys
 import pandas as pd
 import datetime as dt
