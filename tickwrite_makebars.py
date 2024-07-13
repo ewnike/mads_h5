@@ -1,4 +1,4 @@
-from Tickwrite_Utility import *
+import tickwrite_utility
 import tables
 import numpy as np
 import seaborn
