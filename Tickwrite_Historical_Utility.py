@@ -1,11 +1,9 @@
 from Tickwrite_Utility import *
 import sys
-import socket
 import pandas as pd
 import datetime as dt
 from time import sleep
 import numpy as np
-from pandas import DataFrame, read_csv
 import tables
 
 def make_h5(h5_filename = "TD_HistoricalBars.h5"):
