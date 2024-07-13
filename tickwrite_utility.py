@@ -3,10 +3,12 @@ import os
 import datetime as dt
 import datetime as timedelta
 from time import sleep
+from pathlib import Path
+
 import numpy as np
 import h5py
 import tables
-from pathlib import Path
+
 
 
 bar_type = np.dtype([('date', 'M8[D]'), ('time', 'm8[us]'), # store date in months units, with day resolution

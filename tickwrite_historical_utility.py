@@ -1,10 +1,12 @@
-import tickwrite_tility 
 import sys
-import pandas as pd
 import datetime as dt
 from time import sleep
+
+import pandas as pd
 import numpy as np
 import tables
+
+import tickwrite_utility
 
 def make_h5(h5_filename = "TD_HistoricalBars.h5"):
     h5file = tables.open_file(h5_filename, mode="w", title = "Historical Ticks for Wheat, Corn, Soy, SoyMeal, and Bean Oil")
