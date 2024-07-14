@@ -1,6 +1,0 @@
-        for i in range(len(comm1_open)):
-            comm1_diff = comm1_open[i] - comm1_mean
-            comm2_diff = comm2_open[i] - comm2_mean
-            cov_sum += comm1_diff * comm2_diff
-            comm1_sum += comm1_diff**2
-            comm2_sum += comm2_diff**2
