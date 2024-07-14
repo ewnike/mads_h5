@@ -14,7 +14,7 @@ from sklearn import linear_model
 matplotlib.style.use("ggplot")
 
 
-class com_Regression:
+class com_regression:
     """
     Turn commodity regression into a class so that it can be used
     in an application to make working with data more user friendly.
@@ -47,9 +47,9 @@ class com_Regression:
         code to read in
         commodity bars.
         """
+        arr_comm1 = self.data.get_node(f"/TD_HistBars/{self.comm1}").read()
+        arr_comm2 = self.data.get_node(f"/TD_HistBars/{self.comm2}").read()
 
-        arr_comm1 = self.data.get_node(("/TD_HistBars/{}").format(self.comm1)).read()
-        arr_comm2 = self.data.get_node(("/TD_HistBars/{}").format(self.comm2)).read()
         return arr_comm1, arr_comm2
 
     def scatter(self):
@@ -128,7 +128,7 @@ class com_Regression:
 
 
 if __name__ == "__main__":
-    a = com_Regression()
+    a = com_regression()
     print(a.get_stats())
     a.scatter()
     a.regression()
