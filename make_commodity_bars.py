@@ -39,7 +39,6 @@ h5_bar_type = np.dtype(
 
 
 def ticks_to_bars(tick_data, interval):
-
     """
     Collecting ticks and preparing to
     make ticks into commodity bars.
@@ -93,15 +92,13 @@ def ticks_to_bars(tick_data, interval):
 
 
 class CommodityBars:
-
     """
     defined class CommodityBars.
     class creates commodity bars from the
     processed tick data.
     """
 
-    def __init__(self, sym, name, h5file, h5path, is_live):
-        self.symbol = sym
+    def __init__(self, name, h5file, h5path, is_live):
         self.name = name
         self.nparray = np.empty(0, bar_type)
         self.h5file = h5file
@@ -166,7 +163,7 @@ def make_h5(h5_filename="TW_HistoricalBars.h5"):
 
 def make_commodity_data(h5file):
     """
-    make commodity bars and 
+    make commodity bars and
     store locally as /TW_HistBars.
     """
 
@@ -186,7 +183,7 @@ def create_commodity_bars(
     code to set parameters of the making
     commodity bars process.
     """
-    
+
     with tables.open_file(h5_file_path, mode="r") as h5file:
         for node in h5file.walk_nodes("/", classname="Table"):
             print(f"Processing {node._v_pathname}...")
