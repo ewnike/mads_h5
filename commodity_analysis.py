@@ -1,57 +1,60 @@
 """
-Code written for analysis
-of the relationship of price between
-2 commodity futures using tick data
-that was cleaned, processed, and stored
-in py tables.
+Eric Winiecke April, 2017
+Python code for commodity analysis
+using tickwrite_process_ticks and
+make_commodity_bars.
 """
 
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import tables
 from sklearn import linear_model
 
-from shared_types import h5_bar_type
-
 matplotlib.style.use("ggplot")
 
 
-class ComRegression:
+class com_Regression:
     """
     Turn commodity regression into a class so that it can be used
     in an application to make working with data more user friendly.
     The intent is to use this class with a Flask application.
     """
 
-    def __init__(
-        self,
-        comm1=None,
-        comm2=None,
-        time_in_seconds=None,
-        h5file_path="TD_HistoricalBars.h5",
-    ):
-        self.comm1 = comm1 or input("Enter the first commodity you want to analyze: ")
-        self.comm2 = comm2 or input("Enter the second commodity you want to analyze: ")
-        self.time_in_seconds = time_in_seconds or int(
-            input("Enter the length of time, in seconds, to include in each bar: ")
-        )
-        self.data = tables.open_file(h5file_path, mode="r")
+    def __init__(self, comm1=None, comm2=None, time_in_seconds=None):
+        if comm1 is not None:
+            self.comm1 = comm1
+        else:
+            self.comm1 = input("Enter the first commodity you want to analyze: ")
+
+        if comm2 is not None:
+            self.comm2 = comm2
+        else:
+            self.comm2 = input("Enter the second commodity you want to analyze: ")
+
+        self.data = tables.open_file("TD_HistoricalBars.h5", mode="r")
+        if time_in_seconds is not None:
+            self.time_in_seconds = time_in_seconds
+        else:
+            self.time_in_seconds = int(
+                input("Enter the length of time, in seconds, to include in each bar: ")
+            )
+
         self.bars_comm1, self.bars_comm2 = self.read_bars()
 
     def read_bars(self):
         """
-        calls method to make commodity bars
-        of user specified time.
+        code to read in
+        commodity bars.
         """
 
-        arr_comm1 = self.data.get_node(f"/TD_HistBars/{self.comm1}").read()
-        arr_comm2 = self.data.get_node(f"/TD_HistBars/{self.comm2}").read()
+        arr_comm1 = self.data.get_node(("/TD_HistBars/{}").format(self.comm1)).read()
+        arr_comm2 = self.data.get_node(("/TD_HistBars/{}").format(self.comm2)).read()
         return arr_comm1, arr_comm2
 
     def scatter(self):
         """
-        see a scatter plot of the opening
-        price of each bar.
+        Code tha shows a scatter plot.
         """
 
         comm1_open = self.bars_comm1["open_p"]
@@ -61,16 +64,14 @@ class ComRegression:
 
     def regression(self):
         """
-        run a regression analysis
-        on the 2 selected commodities
-        and determine relationship between
-        the price of both.
+        code to make a regression
+        using commodity bars.
         """
 
         comm1_open = self.bars_comm1["open_p"]
         comm2_open = self.bars_comm2["open_p"]
 
-        comm1_time = self.bars_comm1["time"]
+        comm1_time = self.bars_comm1.astype(h5_bar_type)["time"]
 
         regr = linear_model.LinearRegression()
         regr.fit(comm1_time.reshape((-1, 1)), comm1_open.reshape((-1, 1)))
@@ -81,7 +82,7 @@ class ComRegression:
         ax1.scatter(comm1_time, comm1_open, color="black")
         ax1.plot(comm1_time, line_y, color="blue", linewidth=3)
 
-        comm2_time = self.bars_comm2["time"]
+        comm2_time = self.bars_comm2.astype(h5_bar_type)["time"]
         regr = linear_model.LinearRegression()
         regr.fit(comm2_time.reshape((-1, 1)), comm2_open.reshape((-1, 1)))
 
@@ -97,8 +98,8 @@ class ComRegression:
 
     def get_stats(self):
         """
-        gather and report various
-        statistics.
+        Code to calculate and gather
+        stats for commodity analysis.
         """
 
         comm1_sum = 0
@@ -110,9 +111,9 @@ class ComRegression:
         comm1_mean = np.mean(comm1_open)
         comm2_mean = np.mean(comm2_open)
 
-        for comm1_open_value, comm2_open_value in zip(comm1_open, comm2_open):
-            comm1_diff = comm1_open_value - comm1_mean
-            comm2_diff = comm2_open_value - comm2_mean
+        for i in range(len(comm1_open)):
+            comm1_diff = comm1_open[i] - comm1_mean
+            comm2_diff = comm2_open[i] - comm2_mean
             cov_sum += comm1_diff * comm2_diff
             comm1_sum += comm1_diff**2
             comm2_sum += comm2_diff**2
@@ -127,10 +128,7 @@ class ComRegression:
 
 
 if __name__ == "__main__":
-    regression_analysis = ComRegression()
-    regression_analysis.scatter()
-    regression_analysis.regression()
-    stats = regression_analysis.get_stats()
-    print(
-        f"Covariance: {stats[0]}, Sigma Comm1: {stats[1]}, Sigma Comm2: {stats[2]}, Correlation: {stats[3]}, R Coef: {stats[4]}"
-    )
+    a = com_Regression()
+    print(a.get_stats())
+    a.scatter()
+    a.regression()

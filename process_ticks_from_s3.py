@@ -54,6 +54,9 @@ def process_csv_to_hdf5(csv_file, h5file, h5path, sym):
 
 
 def make_h5(h5_filename="tick_data.h5"):
+    """
+    write data to table.
+    """
     return tables.open_file(h5_filename, mode="w", title="Tick Data")
 
 
