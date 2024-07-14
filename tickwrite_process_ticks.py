@@ -13,17 +13,7 @@ import boto3
 import numpy as np
 import pandas as pd
 import tables
-
-# Define the data type for numpy arrays and HDF5 tables
-tick_type = np.dtype(
-    [
-        ("symbol", "S2"),
-        ("date", "datetime64[ns]"),
-        ("time", "timedelta64[ns]"),
-        ("last_p", "float64"),
-        ("last_v", "int64"),
-    ]
-)
+from shared_types import bar_type, h5_bar_type, ticks_to_bars
 
 
 class H5TickType(tables.IsDescription):
