@@ -15,6 +15,7 @@ import tables
 from shared_types import tick_type
 
 
+# pylint: disable=too-few-public-methods
 class H5TickType(tables.IsDescription):
     """
     Description of the HDF5 table structure for tick data.
@@ -28,11 +29,14 @@ class H5TickType(tables.IsDescription):
 
 
 def download_from_s3(bucket_name, s3_file_key, local_file_path):
+    """download code."""
     s3 = boto3.client("s3")
     s3.download_file(bucket_name, s3_file_key, local_file_path)
 
 
+# pylint: disable=duplicate-code
 def process_csv_to_hdf5(csv_file, h5file, h5path, sym):
+    """read csv file, process line, and insert into py table."""
     data = pd.read_csv(csv_file)
     h5table = h5file.create_table(h5path, sym, H5TickType, f"{sym} table")
     for row in data.itertuples(index=False):

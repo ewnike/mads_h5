@@ -28,6 +28,7 @@ class H5BarType(tables.IsDescription):
     volume = tables.Int64Col()
 
 
+# pylint: disable=duplicate-code
 def ticks_to_bars(tick_data, bar_interval):
     """
     collect ticks gathering them
