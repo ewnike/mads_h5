@@ -1,3 +1,10 @@
+"""
+Code rewritten to make commodity_data
+bars from the tick files created with 
+tickwrite_process_ticks.py and
+stored locally as /HistTicks.h5.
+"""
+
 import numpy as np
 import pandas as pd
 import tables
