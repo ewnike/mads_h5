@@ -5,11 +5,12 @@ tickwrite_process_ticks.py and
 stored locally as /HistTicks.h5.
 """
 
+import datetime as dt
+import os
+
 import numpy as np
 import pandas as pd
 import tables
-import os
-import datetime as dt
 
 # Define the data type for bar data
 bar_type = np.dtype(
@@ -38,6 +39,12 @@ h5_bar_type = np.dtype(
 
 
 def ticks_to_bars(tick_data, interval):
+
+    """
+    Collecting ticks and preparing to
+    make ticks into commodity bars.
+    """
+
     tick_data = tick_data.astype(bar_type)
     bar_data = np.empty(0, dtype=bar_type)
 
@@ -86,6 +93,13 @@ def ticks_to_bars(tick_data, interval):
 
 
 class CommodityBars:
+
+    """
+    defined class CommodityBars.
+    class creates commodity bars from the
+    processed tick data.
+    """
+
     def __init__(self, sym, name, h5file, h5path, is_live):
         self.symbol = sym
         self.name = name
@@ -101,6 +115,10 @@ class CommodityBars:
         self.is_live = is_live
 
     def read_data(self, filepath):
+        """
+        code to read tick data
+        """
+
         filepath = Path(filepath)
         count = 0
 
@@ -123,12 +141,20 @@ class CommodityBars:
                 self.save_h5()
 
     def save_h5(self):
+        """
+        save data.
+        """
+
         self.h5table.append(self.nparray.astype(h5_bar_type))
         self.h5file.flush()
         self.nparray = np.empty(0, bar_type)
 
 
 def make_h5(h5_filename="TW_HistoricalBars.h5"):
+    """
+    Make h5 files
+    """
+
     h5file = tables.open_file(
         h5_filename,
         mode="w",
@@ -139,6 +165,11 @@ def make_h5(h5_filename="TW_HistoricalBars.h5"):
 
 
 def make_commodity_data(h5file):
+    """
+    make commodity bars and 
+    store locally as /TW_HistBars.
+    """
+
     commodities = {}
     commodities["WC"] = CommodityBars("WC", "Wheat", h5file, "/TW_HistBars", False)
     commodities["CN"] = CommodityBars("CN", "Corn", h5file, "/TW_HistBars", False)
@@ -151,6 +182,11 @@ def make_commodity_data(h5file):
 def create_commodity_bars(
     h5_file_path, start_date, end_date, duration, start_time, end_time
 ):
+    """
+    code to set parameters of the making
+    commodity bars process.
+    """
+    
     with tables.open_file(h5_file_path, mode="r") as h5file:
         for node in h5file.walk_nodes("/", classname="Table"):
             print(f"Processing {node._v_pathname}...")

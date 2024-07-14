@@ -7,11 +7,12 @@ to a numpy array stored locally
 as an h5_tick_file.
 """
 
+import os
+
+import boto3
 import numpy as np
 import pandas as pd
 import tables
-import boto3
-import os
 
 # Define the data type for numpy arrays and HDF5 tables
 tick_type = np.dtype(
