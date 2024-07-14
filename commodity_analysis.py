@@ -1,3 +1,11 @@
+"""
+Code written for analysis
+of the relationship of price between
+2 commodity futures using tick data
+that was cleaned, processed, and stored
+in py tables.
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
 import tables
@@ -31,17 +39,34 @@ class ComRegression:
         self.bars_comm1, self.bars_comm2 = self.read_bars()
 
     def read_bars(self):
+        """
+        calls method to make commodity bars
+        of user specified time.
+        """
+
         arr_comm1 = self.data.get_node(f"/TD_HistBars/{self.comm1}").read()
         arr_comm2 = self.data.get_node(f"/TD_HistBars/{self.comm2}").read()
         return arr_comm1, arr_comm2
 
     def scatter(self):
+        """
+        see a scatter plot of the opening
+        price of each bar.
+        """
+
         comm1_open = self.bars_comm1["open_p"]
         comm2_open = self.bars_comm2["open_p"]
         plt.scatter(comm1_open, comm2_open)
         plt.show()
 
     def regression(self):
+        """
+        run a regression analysis
+        on the 2 selected commodities
+        and determine relationship between
+        the price of both.
+        """
+
         comm1_open = self.bars_comm1["open_p"]
         comm2_open = self.bars_comm2["open_p"]
 
@@ -71,6 +96,11 @@ class ComRegression:
         plt.show()
 
     def get_stats(self):
+        """
+        gather and report various
+        statistics.
+        """
+
         comm1_sum = 0
         comm2_sum = 0
         cov_sum = 0
