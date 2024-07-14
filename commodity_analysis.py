@@ -5,10 +5,10 @@ using tickwrite_process_ticks and
 make_commodity_bars.
 """
 
-import tables
-import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
+import numpy as np
+import tables
 from sklearn import linear_model
 
 matplotlib.style.use("ggplot")
@@ -43,17 +43,31 @@ class com_Regression:
         self.bars_comm1, self.bars_comm2 = self.read_bars()
 
     def read_bars(self):
+        """
+        code to read in
+        commodity bars.
+        """
+
         arr_comm1 = self.data.get_node(("/TD_HistBars/{}").format(self.comm1)).read()
         arr_comm2 = self.data.get_node(("/TD_HistBars/{}").format(self.comm2)).read()
         return arr_comm1, arr_comm2
 
     def scatter(self):
+        """
+        Code tha shows a scatter plot.
+        """
+
         comm1_open = self.bars_comm1["open_p"]
         comm2_open = self.bars_comm2["open_p"]
         plt.scatter(comm1_open, comm2_open)
         plt.show()
 
     def regression(self):
+        """
+        code to make a regression
+        using commodity bars.
+        """
+
         comm1_open = self.bars_comm1["open_p"]
         comm2_open = self.bars_comm2["open_p"]
 
@@ -83,6 +97,11 @@ class com_Regression:
         plt.show()
 
     def get_stats(self):
+        """
+        Code to calculate and gather
+        stats for commodity analysis.
+        """
+
         comm1_sum = 0
         comm2_sum = 0
         cov_sum = 0
