@@ -11,10 +11,12 @@ import numpy as np
 import tables
 from sklearn import linear_model
 
-matplotlib.style.use("ggplot")
+from shared_types import h5_bar_type  # Importing the h5_bar_type from shared_types
+
+matplotlib.style.use("ggplot")  # pylint: disable=unnecessary-pass
 
 
-class com_Regression:
+class ComRegression:
     """
     Turn commodity regression into a class so that it can be used
     in an application to make working with data more user friendly.
@@ -47,14 +49,13 @@ class com_Regression:
         code to read in
         commodity bars.
         """
-
-        arr_comm1 = self.data.get_node(("/TD_HistBars/{}").format(self.comm1)).read()
-        arr_comm2 = self.data.get_node(("/TD_HistBars/{}").format(self.comm2)).read()
+        arr_comm1 = self.data.get_node(f"/TD_HistBars/{self.comm1}").read()
+        arr_comm2 = self.data.get_node(f"/TD_HistBars/{self.comm2}").read()
         return arr_comm1, arr_comm2
 
     def scatter(self):
         """
-        Code tha shows a scatter plot.
+        Code that shows a scatter plot.
         """
 
         comm1_open = self.bars_comm1["open_p"]
@@ -111,16 +112,16 @@ class com_Regression:
         comm1_mean = np.mean(comm1_open)
         comm2_mean = np.mean(comm2_open)
 
-        for i in range(len(comm1_open)):
-            comm1_diff = comm1_open[i] - comm1_mean
-            comm2_diff = comm2_open[i] - comm2_mean
+        for comm1_open_value, comm2_open_value in zip(comm1_open, comm2_open):
+            comm1_diff = comm1_open_value - comm1_mean
+            comm2_diff = comm2_open_value - comm2_mean
             cov_sum += comm1_diff * comm2_diff
             comm1_sum += comm1_diff**2
             comm2_sum += comm2_diff**2
 
         covariance = cov_sum / (len(comm1_open) - 1)
         sigma_comm1 = np.sqrt(comm1_sum / (len(comm1_open) - 1))
-        sigma_comm2 = np.sqrt(comm2_sum / (len(comm1_open) - 1))
+        sigma_comm2 = np.sqrt(comm2_sum / (len(comm2_open) - 1))
         correlation = covariance / (sigma_comm1 * sigma_comm2)
         r_coef = np.corrcoef(comm1_open, comm2_open)
 
@@ -128,7 +129,7 @@ class com_Regression:
 
 
 if __name__ == "__main__":
-    a = com_Regression()
-    print(a.get_stats())
-    a.scatter()
-    a.regression()
+    regression = ComRegression()
+    print(regression.get_stats())
+    regression.scatter()
+    regression.regression()
