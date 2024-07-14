@@ -1,3 +1,7 @@
+"""
+Shared data types and functions for commodity processing.
+"""
+
 import numpy as np
 
 # Define the data type for bar data
@@ -23,6 +27,17 @@ h5_bar_type = np.dtype(
         ("low_p", "f8"),
         ("close_p", "f8"),
         ("per_vlm", "u8"),
+    ]
+)
+
+# Define the data type for tick data
+tick_type = np.dtype(
+    [
+        ("symbol", "S2"),
+        ("date", "datetime64[ns]"),
+        ("time", "timedelta64[ns]"),
+        ("last_p", "float64"),
+        ("last_v", "int64"),
     ]
 )
 
