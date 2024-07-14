@@ -98,15 +98,15 @@ class CommodityBars:
     processed tick data.
     """
 
-    def __init__(self, name, h5file, h5path, is_live):
-        self.sym = sym
+    def __init__(self, sym, name, h5file, h5path, is_live):
+        self.symbol = sym
         self.name = name
         self.nparray = np.empty(0, bar_type)
         self.h5file = h5file
 
-        if h5path + "/" + self.name not in self.h5file:
+        if f"{h5path}/{self.name}" not in self.h5file:
             self.h5table = h5file.create_table(
-                h5path, self.name, h5_bar_type, "{} table".format(self.name)
+                h5path, self.name, h5_bar_type, f"{self.name} table"
             )
         else:
             self.h5table = self.h5file.get_node(h5path, self.name)
