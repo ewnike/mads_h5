@@ -14,7 +14,7 @@ from sklearn import linear_model
 matplotlib.style.use("ggplot")
 
 
-class com_regression:
+class ComRegression:
     """
     Turn commodity regression into a class so that it can be used
     in an application to make working with data more user friendly.
@@ -128,7 +128,7 @@ class com_regression:
 
 
 if __name__ == "__main__":
-    a = com_regression()
+    a = ComRegression()
     print(a.get_stats())
     a.scatter()
     a.regression()
