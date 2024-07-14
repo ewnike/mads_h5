@@ -1,0 +1,9 @@
+[MASTER]
+# Specify a configuration file.
+#rcfile=
+
+# Python code to lint.
+init-hook='import sys; sys.path.append(".")'
+
+# Specify the Python version.
+py-version=3.12.3
