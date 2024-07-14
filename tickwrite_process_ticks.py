@@ -70,9 +70,9 @@ class CommodityTicks:
         self.h5file = h5file  # shared with other instances
         self.h5path = h5path
 
-        if h5path + "/" + self.name not in self.h5file:
+        if f"{h5path}/{self.name}" not in self.h5file:
             self.h5table = h5file.create_table(
-                h5path, self.name, H5TickType, "{} table".format(self.name)
+                h5path, self.name, H5TickType, f"{self.name} table"
             )
         else:
             self.h5table = self.h5file.get_node(h5path, self.name)
@@ -127,7 +127,7 @@ def download_from_s3(bucket_name, file_key, local_path):
 
 def make_commodity_data(h5file):
     """
-    creates table to 
+    creates table to
     hold the processed tick data.
     """
 
@@ -148,7 +148,6 @@ def main():
     """
     code that puts it all together.
     """
-    
     # S3 bucket details
     bucket_name = "your-s3-bucket-name"
     s3_file_keys = {
