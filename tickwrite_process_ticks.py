@@ -37,7 +37,8 @@ class H5TickType(tables.IsDescription):
         last_p (float): Last price.
         last_v (int): Last volume.
     """
-    symbol = tables.StringCol(2)  
+
+    symbol = tables.StringCol(2)
     date = tables.Time64Col()
     time = tables.Time64Col()
     last_p = tables.Float64Col()
@@ -45,10 +46,23 @@ class H5TickType(tables.IsDescription):
 
 
 def extract_letters(sym):
+    """
+    truncate symbol to 2 letters.
+    """
+
     return sym[:2] + sym[3:]
 
 
 class CommodityTicks:
+    """
+    class defining process
+    used to create commodity ticks.
+    process reads data from csv file
+    in s3 bucket, converts each row
+    of data into a numpy array, and
+    stores in a py table.
+    """
+
     def __init__(self, sym, name, h5file, h5path, is_live):
         self.symbol = sym
         self.name = name
@@ -65,6 +79,11 @@ class CommodityTicks:
         self.is_live = is_live
 
     def process_file(self, path):
+        """
+        code to process
+        tick data.
+        """
+
         data = pd.read_csv(path)
         data["sym"] = data["sym"].apply(extract_letters)
 
@@ -84,6 +103,10 @@ class CommodityTicks:
             self.save_h5()
 
     def save_h5(self):
+        """
+        save data in h5 file.
+        """
+
         self.h5table.append(self.nparray)
         self.h5file.flush()
         print(f"Data for {self.name} saved to HDF5!")
@@ -91,12 +114,23 @@ class CommodityTicks:
 
 
 def download_from_s3(bucket_name, file_key, local_path):
+    """
+    method for accessing
+    and downloading raw data
+    storedin s3 buckets.
+    """
+
     s3 = boto3.client("s3")
     s3.download_file(bucket_name, file_key, local_path)
     print(f"Downloaded {file_key} from S3 to {local_path}")
 
 
 def make_commodity_data(h5file):
+    """
+    creates table to 
+    hold the processed tick data.
+    """
+
     commodities = {}
     commodities["WC"] = CommodityTicks(
         "WC", "soft_red_wheat", h5file, "/HistTicks", False
@@ -111,6 +145,10 @@ def make_commodity_data(h5file):
 
 
 def main():
+    """
+    code that puts it all together.
+    """
+    
     # S3 bucket details
     bucket_name = "your-s3-bucket-name"
     s3_file_keys = {
