@@ -136,7 +136,7 @@ class ComRegression:
         comm1_mean = np.mean(comm1_open)
         comm2_mean = np.mean(comm2_open)
 
-        for i, (comm1_open_value, comm2_open_value) in enumerate(
+        for comm1_open_value, comm2_open_value in enumerate(
             zip(comm1_open, comm2_open)
         ):
             comm1_diff = comm1_open_value - comm1_mean

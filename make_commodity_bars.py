@@ -99,6 +99,7 @@ class CommodityBars:
     """
 
     def __init__(self, name, h5file, h5path, is_live):
+        self.sym = sym
         self.name = name
         self.nparray = np.empty(0, bar_type)
         self.h5file = h5file
