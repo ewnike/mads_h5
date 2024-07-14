@@ -7,6 +7,7 @@ stored locally as /HistTicks.h5.
 
 import datetime as dt
 import os
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -116,8 +117,8 @@ class CommodityBars:
         """
         code to read tick data
         """
-
-        filepath = Path(filepath)
+        if not isinstance(filepath, Path):
+            filepath = Path(filepath)
         count = 0
 
         with open(filepath, "r") as fp_object:
@@ -158,7 +159,7 @@ def make_h5(h5_filename="TW_HistoricalBars.h5"):
         mode="w",
         title="Historical Ticks for Wheat, Corn, Soy, SoyMeal, and Bean Oil",
     )
-    group = h5file.create_group("/", "TW_HistBars", "Bar data")
+    _ = h5file.create_group("/", "TW_HistBars", "Bar data")
     return h5file
 
 
@@ -201,6 +202,14 @@ def create_commodity_bars(
 
 
 def main():
+    """
+    main function used to
+    coordinate the previously defined
+    functions into a process
+    that makes commodity bars
+    for a specific commodity, date, and time.
+    """
+
     # Path to the local HDF5 file
     local_dir = os.path.expanduser("~/Desktop/commodity_data")
     h5_file_path = os.path.join(local_dir, "TD_HistoricalTicks.h5")

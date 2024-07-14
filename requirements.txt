@@ -24,6 +24,7 @@ numpy==2.0.0
 packaging==24.1
 pandas==2.2.2
 path==16.14.0
+pathlib==1.0.1
 pillow==10.4.0
 platformdirs==4.2.2
 py-cpuinfo==9.0.0
