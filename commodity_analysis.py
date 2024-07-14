@@ -13,6 +13,31 @@ from sklearn import linear_model
 
 matplotlib.style.use("ggplot")
 
+# Define the data type for bar data
+bar_type = np.dtype(
+    [
+        ("date", "M8[D]"),
+        ("time", "m8[us]"),
+        ("open_p", "f8"),
+        ("high_p", "f8"),
+        ("low_p", "f8"),
+        ("close_p", "f8"),
+        ("per_vlm", "u8"),
+    ]
+)
+
+h5_bar_type = np.dtype(
+    [
+        ("date", "i8"),
+        ("time", "i8"),
+        ("open_p", "f8"),
+        ("high_p", "f8"),
+        ("low_p", "f8"),
+        ("close_p", "f8"),
+        ("per_vlm", "u8"),
+    ]
+)
+
 
 class ComRegression:
     """
@@ -111,9 +136,11 @@ class ComRegression:
         comm1_mean = np.mean(comm1_open)
         comm2_mean = np.mean(comm2_open)
 
-        for i in range(len(comm1_open)):
-            comm1_diff = comm1_open[i] - comm1_mean
-            comm2_diff = comm2_open[i] - comm2_mean
+        for i, (comm1_open_value, comm2_open_value) in enumerate(
+            zip(comm1_open, comm2_open)
+        ):
+            comm1_diff = comm1_open_value - comm1_mean
+            comm2_diff = comm2_open_value - comm2_mean
             cov_sum += comm1_diff * comm2_diff
             comm1_sum += comm1_diff**2
             comm2_sum += comm2_diff**2
