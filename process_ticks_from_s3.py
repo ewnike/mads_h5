@@ -1,8 +1,8 @@
 """
 Code that processes futures
-trade data that is stored in 
+trade data that is stored in
 aws s3 bucket. Step 1 of
-the process. 
+the process.
 """
 
 import os
